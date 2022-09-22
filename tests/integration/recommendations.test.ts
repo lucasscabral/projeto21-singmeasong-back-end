@@ -51,19 +51,43 @@ describe("Testa remoção de pontos na recomendação", () => {
     it("Deve retornar 200 para a remoção de um ponto na recomendação", async () => {
         const bodyRecommendation = await recommendationsFactory.bodyRecommendation()
 
+        //PRIMEIRO CRIA UMA RECOMENDAÇÃO
         await supertest(app).post("/recommendations/").send(bodyRecommendation)
 
+        //LISTA A RECOMENDAÇÃO CRIADA
         const getRecommendations = await supertest(app).get("/recommendations/").send()
         const idRecommendation = getRecommendations.body[0].id
 
-        const upvote = await supertest(app).post(`/recommendations/${idRecommendation}/upvote`).send({})
+        //ADICIONA UMA PONTUAÇÃO NA RECOMENDAÇÃO 
+        await supertest(app).post(`/recommendations/${idRecommendation}/upvote`).send({})
+
+        //REMOVE UMA PONTUAÇÃO NA RECOMENDAÇÃO
+        const downvote = await supertest(app).post(`/recommendations/${idRecommendation}/downvote`).send({})
+
+        //BUSCA A RECOMENDAÇÃO CRIADA NO INÍCIO E PEGA O SCORE DESSA RECOMENDAÇÃO
         const getByIdRecommendation = await supertest(app).get(`/recommendations/${idRecommendation}`).send()
         const score = getByIdRecommendation.body.score
 
-        expect(upvote.status).toBe(200)
-        expect(score).toBe(1)
+        expect(downvote.status).toBe(200)
+        expect(score).toBe(0)
     })
+
+    it("Deve remover a recomendação,caso a sua pontuação seja menor que -5", async () => {
+        const bodyRecommendation = await recommendationsFactory.bodyRecommendation()
+
+        //PRIMEIRO CRIA UMA RECOMENDAÇÃO
+        await supertest(app).post("/recommendations/").send(bodyRecommendation)
+
+        const idRecommendation = 1
+        await recommendationsFactory.removeRecommendationByScore(idRecommendation)
+
+        const recommendation = await supertest(app).get(`/recommendations/${idRecommendation}`).send()
+
+        expect(recommendation.status).toBe(404)
+    })
+
 })
+
 
 describe("Testa a listagem das Recomendações", () => {
     it("Deve retornar um array de recomendações", async () => {
@@ -71,6 +95,13 @@ describe("Testa a listagem das Recomendações", () => {
 
         expect(getRecommendations.status).toBe(200)
         expect(getRecommendations.body).toBeInstanceOf(Array)
+    })
+    it("Deve retornar apenas as 10 últimas recomendações", async () => {
+        await recommendationsFactory.createManyRecommendations()
+        const getRecommendations = await supertest(app).get("/recommendations/").send()
+
+        expect(getRecommendations.status).toBe(200)
+        expect(getRecommendations.body).toHaveLength(10)
     })
 })
 
