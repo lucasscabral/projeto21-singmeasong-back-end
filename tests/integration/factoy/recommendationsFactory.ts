@@ -58,15 +58,5 @@ export async function visitRouterRandom(visitsRoute: number, random: string) {
             }
         }
     }
-    // if (random === "random_less_or_equal_10") {
-    //     for (let i = 0; i < visitsRoute; i++) {
-    //         const recommendationRendom = await supertest(app).get("/recommendations/").send()
-    //         const recommendation = recommendationRendom?.body
-    //         if (recommendation.score <= 10) {
-    //             listRecommendations.push(recommendation)
-    //         }
-    //     }
-    // }
-    //console.log(listRecommendations)
     return listRecommendations
 }

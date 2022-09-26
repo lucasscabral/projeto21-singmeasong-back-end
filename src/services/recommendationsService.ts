@@ -41,23 +41,23 @@ async function getByIdOrFail(id: number) {
 }
 
 async function get() {
-  return recommendationRepository.findAll();
+  return await recommendationRepository.findAll();
 }
 
 async function getTop(amount: number) {
-  return recommendationRepository.getAmountByScore(amount);
+  return await recommendationRepository.getAmountByScore(amount);
 }
 
 async function getRandom() {
   const random = Math.random();
-  const scoreFilter = getScoreFilter(random);
+  const scoreFilter = await getScoreFilter(random);
 
   const recommendations = await getByScore(scoreFilter);
-  if (recommendations.length === 0) {
+  if (recommendations?.length === 0) {
     throw notFoundError();
   }
 
-  const randomIndex = Math.floor(Math.random() * recommendations.length);
+  const randomIndex = Math.floor(Math.random() * recommendations?.length);
   return recommendations[randomIndex];
 }
 
@@ -67,14 +67,14 @@ async function getByScore(scoreFilter: "gt" | "lte") {
     scoreFilter,
   });
 
-  if (recommendations.length > 0) {
+  if (recommendations?.length > 0) {
     return recommendations;
   }
 
-  return recommendationRepository.findAll();
+  return await recommendationRepository.findAll();
 }
 
-function getScoreFilter(random: number) {
+async function getScoreFilter(random: number) {
   if (random < 0.7) {
     return "gt";
   }

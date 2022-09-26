@@ -13,18 +13,18 @@ interface FindAllWhere {
   scoreFilter: "lte" | "gt";
 }
 
-function findAll(findAllWhere?: FindAllWhere) {
+async function findAll(findAllWhere?: FindAllWhere) {
   const filter = getFindAllFilter(findAllWhere);
 
-  return prisma.recommendation.findMany({
+  return await prisma.recommendation.findMany({
     where: filter,
     orderBy: { id: "desc" },
     take: 10
   });
 }
 
-function getAmountByScore(take: number) {
-  return prisma.recommendation.findMany({
+async function getAmountByScore(take: number) {
+  return await prisma.recommendation.findMany({
     orderBy: { score: "desc" },
     take,
   });
@@ -40,20 +40,20 @@ function getFindAllFilter(findAllWhere?: FindAllWhere): Prisma.RecommendationWhe
   };
 }
 
-function find(id: number) {
-  return prisma.recommendation.findUnique({
+async function find(id: number) {
+  return await prisma.recommendation.findUnique({
     where: { id },
   });
 }
 
-function findByName(name: string) {
-  return prisma.recommendation.findUnique({
+async function findByName(name: string) {
+  return await prisma.recommendation.findUnique({
     where: { name },
   });
 }
 
 async function updateScore(id: number, operation: "increment" | "decrement") {
-  return prisma.recommendation.update({
+  return await prisma.recommendation.update({
     where: { id },
     data: {
       score: { [operation]: 1 },

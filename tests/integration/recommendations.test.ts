@@ -242,6 +242,19 @@ describe("Testa retorno de uma recomendação aleatória", () => {
     })
 })
 
+describe('GET /recommendations/top/:amount', () => {
+    it('Should return status 200 and an array of recommendations', async () => {
+        const createRecommendation = 10
+
+        await recommendationsFactory.createManyRecommendations(createRecommendation)
+
+        const result = await supertest(app).get(`/recommendations/top/${10}`);
+
+        expect(result.status).toEqual(200);
+        expect(result.body).toBeInstanceOf(Array);
+    });
+})
+
 afterAll(async () => {
     await prisma.$disconnect()
 })
