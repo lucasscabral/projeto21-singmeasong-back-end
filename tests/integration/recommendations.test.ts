@@ -242,8 +242,8 @@ describe("Testa retorno de uma recomendação aleatória", () => {
     })
 })
 
-describe('GET /recommendations/top/:amount', () => {
-    it('Should return status 200 and an array of recommendations', async () => {
+describe('Testa rota /recommendations/top/:amount', () => {
+    it('Deve retornar o status 200 e uma série de recomendações', async () => {
         const createRecommendation = 10
 
         await recommendationsFactory.createManyRecommendations(createRecommendation)

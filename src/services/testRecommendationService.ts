@@ -7,3 +7,7 @@ export type CreateRecommendationData = Omit<Recommendation, 'id' | 'score'>;
 export async function reset() {
     await testRecommendationResporitory.reset()
 }
+
+export async function createManyRecomendations() {
+    await testRecommendationResporitory.createManyRecomendations()
+}

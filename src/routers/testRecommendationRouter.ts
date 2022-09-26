@@ -4,5 +4,6 @@ import * as testRecommendationController from "../controllers/testRecommendation
 const testRecommendationRouter = Router()
 
 testRecommendationRouter.post("/e2e/reset", testRecommendationController.resetDb)
+testRecommendationRouter.post("/e2e/seed", testRecommendationController.populateRecommendations);
 
 export default testRecommendationRouter
