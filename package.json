@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node src/server.ts",
-    "test": "dotenv -e .env.test jest --no-cahe",
-    "dev": "nodemon src/server.ts"
+    "test:unit": "dotenv -e .env.test jest -- -i --no-cahe",
+    "test:integration": "dotenv -e .env.test jest -- -i --no-cahe --testPathPattern=/tests/integration",
+    "dev": "dotenv -e .env.test nodemon src/server.ts"
   },
   "keywords": [],
   "author": "",

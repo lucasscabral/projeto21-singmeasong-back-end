@@ -30,9 +30,7 @@ function getAmountByScore(take: number) {
   });
 }
 
-function getFindAllFilter(
-  findAllWhere?: FindAllWhere
-): Prisma.RecommendationWhereInput {
+function getFindAllFilter(findAllWhere?: FindAllWhere): Prisma.RecommendationWhereInput {
   if (!findAllWhere) return {};
 
   const { score, scoreFilter } = findAllWhere;
